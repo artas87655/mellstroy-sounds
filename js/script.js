@@ -1,11 +1,10 @@
-﻿// Звуковая панель Mellstroy - С СЕКРЕТНОЙ ЗАГРУЗКОЙ
+// Звуковая панель Mellstroy - БЕЗ АДМИН-ПАНЕЛИ
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Скрипт запущен!');
     
     const soundBoard = {
         sounds: new Map(),
         currentlyPlaying: null,
-        adminMode: false,
         
         // МАССИВ С НАЗВАНИЯМИ МЕМОВ - РЕДАКТИРУЙТЕ ЗДЕСЬ!
         memeNames: [
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Инициализация звуковой панели...');
             this.createSoundPanels();
             this.setupEventListeners();
-            this.setupAdminMode();
             console.log('Инициализация завершена');
         },
         
@@ -92,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`Пытаюсь загрузить: sounds/${filename}`);
             
             const audio = new Audio();
-            audio.src = `sounds/${filename}`;
+            audio.src = `./sounds/${filename}`;
             audio.preload = 'auto';
             
             audio.addEventListener('loadeddata', () => {
@@ -208,108 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (stopBtn) {
                 stopBtn.addEventListener('click', () => {
                     this.stopCurrentSound();
-                    alert('Все звуки остановлены');
                 });
             }
-        },
-        
-        // Секретный режим админа
-        setupAdminMode() {
-            const adminBtn = document.getElementById('admin-upload-btn');
-            const uploadSection = document.getElementById('admin-upload-section');
-            const fileInput = document.getElementById('sound-upload');
-            
-            // Секретная комбинация клавиш: Ctrl+Shift+A
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                    e.preventDefault();
-                    this.toggleAdminMode();
-                }
-            });
-            
-            // Кнопка админа
-            if (adminBtn) {
-                adminBtn.addEventListener('click', () => {
-                    this.toggleAdminMode();
-                });
-            }
-            
-            // Загрузка файлов
-            if (fileInput) {
-                fileInput.addEventListener('change', (e) => {
-                    this.handleFileUpload(e.target.files);
-                    fileInput.value = ''; // Сбрасываем input
-                });
-            }
-        },
-        
-        // Переключение режима админа
-        toggleAdminMode() {
-            this.adminMode = !this.adminMode;
-            const adminBtn = document.getElementById('admin-upload-btn');
-            const uploadSection = document.getElementById('admin-upload-section');
-            const footer = document.querySelector('footer p');
-            
-            if (this.adminMode) {
-                // Показываем админ-панель
-                adminBtn.style.display = 'block';
-                uploadSection.style.display = 'block';
-                footer.textContent = '© 2024 Mellstroy Sounds. 🔓 Режим админа активен';
-                console.log('🔓 Режим админа активирован');
-                alert('🔓 Режим админа активирован! Теперь можно загружать звуки.');
-            } else {
-                // Скрываем админ-панель
-                adminBtn.style.display = 'none';
-                uploadSection.style.display = 'none';
-                footer.textContent = '© 2024 Mellstroy Sounds. Нажмите Ctrl+Shift+A для режима админа';
-                console.log('🔒 Режим админа деактивирован');
-            }
-        },
-        
-        // Обработка загрузки файлов
-        handleFileUpload(files) {
-            const fileList = Array.from(files);
-            console.log('Загружено файлов:', fileList.length);
-            
-            let uploadedCount = 0;
-            
-            fileList.forEach((file, index) => {
-                if (file.type.startsWith('audio/')) {
-                    // Определяем номер звука из имени файла
-                    const match = file.name.match(/sounds(\d+)\.mp3/i);
-                    if (match && match[1]) {
-                        const soundNumber = parseInt(match[1]);
-                        if (soundNumber >= 1 && soundNumber <= 12) {
-                            this.replaceSound(soundNumber, file);
-                            uploadedCount++;
-                        }
-                    }
-                }
-            });
-            
-            if (uploadedCount > 0) {
-                alert(`✅ Успешно загружено ${uploadedCount} звуков! Страница перезагрузится.`);
-                setTimeout(() => {
-                    location.reload(); // Перезагружаем страницу чтобы применить изменения
-                }, 1000);
-            } else {
-                alert('❌ Не удалось загрузить звуки. Убедитесь что файлы называются sounds1.mp3, sounds2.mp3 и т.д.');
-            }
-        },
-        
-        // Замена существующего звука
-        replaceSound(soundNumber, file) {
-            const soundId = `sound${soundNumber}`;
-            const objectURL = URL.createObjectURL(file);
-            
-            // Создаем новый аудио элемент
-            const audio = new Audio(objectURL);
-            audio.preload = 'auto';
-            
-            // Заменяем в коллекции
-            this.sounds.set(soundId, audio);
-            
-            console.log(`🔄 Заменен звук: ${soundId}`);
         }
     };
     
