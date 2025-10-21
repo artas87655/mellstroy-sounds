@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
             "АМ АМ АМ",
             "сливыы", 
             "Реакция на донат",
-            "Эпичный крик",
+            "радуется",
             "Шутка в чате",
-            "Удивление",
+            "что за бизнэс remix",
             "Боевой клич",
             "Приветствие",
             "Прощание", 
@@ -223,4 +223,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
 
