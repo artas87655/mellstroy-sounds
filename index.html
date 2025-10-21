@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mellstroy - Звуковые мемы</title>
+    <title>Mellstroy - Мемы</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="background-text">MELLSTROY.GAME</div>
+    
     <header>
         <nav>
             <div class="logo">
-                <h1>MELLSTROY SOUNDS</h1>
+                <h1>MELLSTROY MEM</h1>
                 <p>Коллекция мемов и звуков</p>
             </div>
         </nav>
@@ -24,11 +26,6 @@
                 <span id="volume-value">70%</span>
             </div>
             <button id="stop-all" class="stop-btn">Остановить все звуки</button>
-            
-            <!-- Секретная кнопка админа (изначально скрыта) -->
-            <button id="admin-upload-btn" class="admin-btn" style="display: none;">
-                📁 Загрузить звуки (Админ)
-            </button>
         </section>
 
         <section class="sound-board">
@@ -37,28 +34,10 @@
                 <!-- Панели появятся здесь -->
             </div>
         </section>
-
-        <!-- Секция для загрузки (изначально скрыта) -->
-        <section id="admin-upload-section" class="upload-section" style="display: none;">
-            <h2>📁 Загрузка звуков (Только для админа)</h2>
-            <div class="upload-area">
-                <input type="file" id="sound-upload" accept="audio/*" multiple>
-                <label for="sound-upload" class="upload-btn">
-                    Выберите аудиофайлы
-                </label>
-                <p class="upload-hint">MP3, WAV, OGG | Максимум 12 файлов</p>
-                
-                <div class="upload-instructions">
-                    <h4>Как назвать файлы:</h4>
-                    <p><code>sounds1.mp3</code>, <code>sounds2.mp3</code>, ... <code>sounds12.mp3</code></p>
-                    <p>Файлы автоматически появятся на соответствующих панелях</p>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Mellstroy Sounds. Нажмите Ctrl+Shift+A для режима админа</p>
+        <p>&copy; 2024 Mellstroy Mem</p>
     </footer>
 
     <script src="js/script.js"></script>
