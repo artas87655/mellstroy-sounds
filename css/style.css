@@ -1,299 +1,129 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Добавь эти стили в конец твоего CSS файла */
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    min-height: 100vh;
-    line-height: 1.6;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* Фоновый текст MELLSTROY.GAME */
-.background-text {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    font-size: 25vw;
-    font-weight: 900;
-    background: linear-gradient(45deg, rgba(233, 69, 96, 0.1), rgba(243, 156, 18, 0.1), rgba(52, 152, 219, 0.1));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+/* Кнопки на панелях */
+.panel-buttons {
     display: flex;
-    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
     justify-content: center;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.4;
-    text-transform: uppercase;
-    letter-spacing: 2vw;
-}
-
-/* Header */
-header {
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem 0;
-    border-bottom: 2px solid #e94560;
-    position: relative;
-    z-index: 1;
-}
-
-nav {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    text-align: center;
-}
-
-.logo h1 {
-    font-size: 3rem;
-    background: linear-gradient(45deg, #e94560, #f39c12, #e94560);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 10px rgba(233, 69, 96, 0.3);
-    animation: gradientShift 3s ease-in-out infinite;
-}
-
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-.logo p {
-    color: #b8b8b8;
-    font-size: 1.1rem;
-}
-
-/* Controls */
-.controls {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
-    position: relative;
-    z-index: 1;
 }
 
-.volume-control {
+.play-btn {
+    background: linear-gradient(45deg, #e94560, #f39c12);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
+    gap: 0.3rem;
+    min-width: 120px;
+    justify-content: center;
 }
 
-.volume-control label {
+.play-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(233, 69, 96, 0.4);
+}
+
+.download-btn {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
+}
+
+/* Соцсети в футере */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     font-weight: 500;
 }
 
-#volume {
-    width: 150px;
-}
-
-#volume-value {
-    min-width: 40px;
-    text-align: center;
-}
-
-.stop-btn {
-    background: linear-gradient(45deg, #e94560, #c23616);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
-    backdrop-filter: blur(10px);
-}
-
-.stop-btn:hover {
+.social-link:hover {
+    background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Sound Board */
-.sound-board {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem 4rem;
-    position: relative;
-    z-index: 1;
+/* Цвета для разных соцсетей */
+.social-link.instagram:hover {
+    background: linear-gradient(45deg, #E1306C, #F77737);
 }
 
-.sound-board h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    background: linear-gradient(45deg, #e94560, #f39c12);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 2px 10px rgba(233, 69, 96, 0.3);
+.social-link.tiktok:hover {
+    background: linear-gradient(45deg, #000000, #69C9D0);
 }
 
-.sounds-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+.social-link.kik:hover {
+    background: linear-gradient(45deg, #82C91E, #40C057);
 }
 
-.sound-panel {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
+.social-link.twitch:hover {
+    background: linear-gradient(45deg, #9146FF, #6441A5);
 }
 
-.sound-panel::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s ease;
+/* Адаптивность для кнопок */
+@media (max-width: 768px) {
+    .panel-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .play-btn, .download-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .social-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .social-link {
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+    }
 }
 
-.sound-panel:hover::before {
-    left: 100%;
-}
-
-.sound-panel:hover {
-    transform: translateY(-5px);
-    border-color: #e94560;
-    box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
-}
-
-.sound-panel:active {
-    transform: translateY(0);
-}
-
-.panel-content {
-    text-align: center;
-    position: relative;
-    z-index: 1;
-}
-
-.panel-content h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.sound-info {
-    margin: 0.5rem 0;
-}
-
-.sound-filename {
-    font-size: 0.7rem;
-    color: #b8b8b8;
-    font-family: monospace;
-    word-break: break-all;
-}
-
-.sound-status {
-    font-size: 0.8rem;
-    margin: 0.3rem 0;
-    color: #b8b8b8;
-    font-weight: bold;
-}
-
+/* Обновлённые стили для иконки воспроизведения */
 .play-icon {
-    font-size: 2rem;
-    color: #e94560;
+    font-size: 1rem;
+    color: white;
     transition: all 0.3s ease;
-    margin-top: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.sound-panel:hover .play-icon {
-    transform: scale(1.2);
-    color: #f39c12;
-}
-
-.sound-panel.playing {
-    background: linear-gradient(135deg, rgba(233, 69, 96, 0.3), rgba(243, 156, 18, 0.2));
-    border: 2px solid #e94560;
 }
 
 .sound-panel.playing .play-icon {
-    color: #f39c12;
     animation: pulse 0.6s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(0, 0, 0, 0.7);
-    border-top: 1px solid #333;
-    color: #b8b8b8;
-    position: relative;
-    z-index: 1;
-    backdrop-filter: blur(10px);
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .controls {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .sounds-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-    
-    .logo h1 {
-        font-size: 2.5rem;
-    }
-    
-    .sound-board h2 {
-        font-size: 2rem;
-    }
-    
-    .background-text {
-        font-size: 20vw;
-        opacity: 0.3;
-    }
-}
-
-@media (max-width: 480px) {
-    .background-text {
-        font-size: 15vw;
-        opacity: 0.2;
-    }
 }
