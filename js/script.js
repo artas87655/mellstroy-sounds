@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // МАССИВ С НАЗВАНИЯМИ МЕМОВ - РЕДАКТИРУЙТЕ ЗДЕСЬ!
         memeNames: [
-            "Легендарная фраза 1",
-            "Смех до слёз", 
+            "АМ АМ АМ",
+            "сливыы", 
             "Реакция на донат",
             "Эпичный крик",
             "Шутка в чате",
@@ -223,3 +223,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
