@@ -1,32 +1,43 @@
-// Звуковая панель Mellstroy - С КНОПКОЙ СКАЧИВАНИЯ
+// Звуковая панель Mellstroy - ОПТИМИЗИРОВАННАЯ
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Скрипт запущен!');
     
     const soundBoard = {
         sounds: new Map(),
         currentlyPlaying: null,
+        audioContext: null,
         
-        // МАССИВ С НАЗВАНИЯМИ МЕМОВ - РЕДАКТИРУЙТЕ ЗДЕСЬ!
+        // МАССИВ С НАЗВАНИЯМИ МЕМОВ
         memeNames: [
-            "Легендарная фраза 1",
-            "Смех до слёз", 
-            "Реакция на донат",
-            "Эпичный крик",
-            "Шутка в чате",
-            "Удивление",
-            "Боевой клич",
-            "Приветствие",
-            "Прощание", 
-            "Мотивация",
-            "Троллинг",
-            "Цитата дня"
+            "амамам",
+            "сливыы", 
+            "сколькоо?",
+            "радуется",
+			"бэмбэмбэм",
+            "что за бизнэс remix",
+            "что за бизнэс",
+            "легендарный звук доната ",
+            "да да нет нет remix ", 
+            " ёще не придумал ",
+            " ещё не придумал",
+            " еще не придумал"
         ],
         
         init() {
             console.log('Инициализация звуковой панели...');
+            this.setupAudioContext();
             this.createSoundPanels();
             this.setupEventListeners();
             console.log('Инициализация завершена');
+        },
+        
+        // Создаем AudioContext для лучшего управления звуком
+        setupAudioContext() {
+            try {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('AudioContext не поддерживается:', e);
+            }
         },
         
         // Создаем панели для звуков
@@ -38,25 +49,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Очищаем контейнер
-            soundsContainer.innerHTML = '';
+            // Используем DocumentFragment для быстрой вставки
+            const fragment = document.createDocumentFragment();
             
-            // Создаем 12 панелей с кастомными названиями
             for (let i = 1; i <= 12; i++) {
                 const soundId = `sound${i}`;
                 const filename = `sounds${i}.mp3`;
-                
-                // Берем названия из массива (если есть) или используем стандартные
                 const memeName = this.memeNames[i-1] || `Мем ${i}`;
                 
                 const panel = this.createSoundPanel(soundId, filename, memeName);
-                soundsContainer.appendChild(panel);
+                fragment.appendChild(panel);
                 
-                // Пытаемся предзагрузить звук
-                this.preloadSound(soundId, filename);
+                // Откладываем предзагрузку для оптимизации
+                setTimeout(() => {
+                    this.preloadSound(soundId, filename);
+                }, i * 100); // Загружаем с задержкой
             }
             
-            console.log('Создано 12 звуковых панелей с кастомными названиями');
+            soundsContainer.appendChild(fragment);
+            console.log('Создано 12 звуковых панелей');
         },
         
         // Создание одной панели
@@ -84,16 +95,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
             
-            // Обработчик клика на кнопку воспроизведения
+            // Делегирование событий для оптимизации
             const playBtn = panel.querySelector('.play-btn');
+            const downloadBtn = panel.querySelector('.download-btn');
+            
             playBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                console.log(`Клик по панели: ${soundId}`);
                 this.playSound(soundId, panel, filename);
             });
             
-            // Обработчик клика на кнопку скачивания
-            const downloadBtn = panel.querySelector('.download-btn');
             downloadBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.downloadSound(filename, title);
@@ -102,38 +112,42 @@ document.addEventListener('DOMContentLoaded', function() {
             return panel;
         },
         
-        // Предзагрузка звука
+        // Предзагрузка звука с оптимизацией
         preloadSound(soundId, filename) {
-            console.log(`Пытаюсь загрузить: sounds/${filename}`);
-            
             const audio = new Audio();
             audio.src = `./sounds/${filename}`;
-            audio.preload = 'auto';
+            audio.preload = 'metadata'; // Только метаданные для экономии трафика
             
-            audio.addEventListener('loadeddata', () => {
+            const onLoaded = () => {
                 console.log(`✅ Звук загружен: ${filename}`);
                 this.updateStatus(soundId, '✅ Готов');
                 this.sounds.set(soundId, audio);
-            });
+                // Убираем обработчики после загрузки
+                audio.removeEventListener('loadeddata', onLoaded);
+                audio.removeEventListener('error', onError);
+            };
             
-            audio.addEventListener('error', (e) => {
+            const onError = (e) => {
                 console.error(`❌ Ошибка загрузки: ${filename}`, e);
                 this.updateStatus(soundId, '❌ Файл не найден');
-            });
+                audio.removeEventListener('loadeddata', onLoaded);
+                audio.removeEventListener('error', onError);
+            };
+            
+            audio.addEventListener('loadeddata', onLoaded, { once: true });
+            audio.addEventListener('error', onError, { once: true });
         },
         
-        // Воспроизведение звука
-        playSound(soundId, panel, filename) {
-            console.log(`Попытка воспроизвести: ${soundId}`);
-            
+        // Воспроизведение звука с оптимизацией
+        async playSound(soundId, panel, filename) {
             // Останавливаем текущий звук
             this.stopCurrentSound();
             
             const audio = this.sounds.get(soundId);
             
             if (!audio) {
-                console.error(`Звук не найден в памяти: ${soundId}`);
-                alert(`Звук ${filename} не загружен. Проверьте папку sounds/`);
+                console.error(`Звук не найден: ${soundId}`);
+                this.updateStatus(soundId, '❌ Ошибка');
                 return;
             }
             
@@ -144,59 +158,61 @@ document.addEventListener('DOMContentLoaded', function() {
             // Сбрасываем на начало
             audio.currentTime = 0;
             
-            // Воспроизводим
-            const playPromise = audio.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    console.log(`🎵 Воспроизведение: ${filename}`);
-                    this.currentlyPlaying = audio;
-                    this.setPlayingState(panel, true);
-                    this.updateStatus(soundId, '🔴 Играет...');
-                    
-                    // Когда звук закончится
-                    audio.addEventListener('ended', () => {
-                        console.log(`⏹️ Звук завершен: ${filename}`);
-                        this.setPlayingState(panel, false);
-                        this.updateStatus(soundId, '✅ Готов');
-                        this.currentlyPlaying = null;
-                    }, { once: true });
-                    
-                }).catch(error => {
-                    console.error('Ошибка воспроизведения:', error);
-                    alert(`Ошибка: ${error.message}`);
-                    this.updateStatus(soundId, '❌ Ошибка');
-                });
+            try {
+                // Восстанавливаем AudioContext если нужно
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    await this.audioContext.resume();
+                }
+                
+                // Воспроизводим
+                await audio.play();
+                
+                this.currentlyPlaying = audio;
+                this.setPlayingState(panel, true);
+                this.updateStatus(soundId, '🔴 Играет...');
+                
+                // Обработчик окончания
+                const onEnded = () => {
+                    this.setPlayingState(panel, false);
+                    this.updateStatus(soundId, '✅ Готов');
+                    this.currentlyPlaying = null;
+                    audio.removeEventListener('ended', onEnded);
+                };
+                
+                audio.addEventListener('ended', onEnded, { once: true });
+                
+            } catch (error) {
+                console.error('Ошибка воспроизведения:', error);
+                this.updateStatus(soundId, '❌ Ошибка');
             }
         },
         
         // Скачивание звука
         downloadSound(filename, title) {
             const soundUrl = `./sounds/${filename}`;
-            
-            // Создаем временную ссылку для скачивания
             const link = document.createElement('a');
             link.href = soundUrl;
             link.download = `${title}.mp3`;
+            link.style.display = 'none';
             
-            // Эмулируем клик для скачивания
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
             
-            console.log(`⬇️ Скачивание: ${filename}`);
+            // Удаляем ссылку после скачивания
+            setTimeout(() => {
+                document.body.removeChild(link);
+            }, 100);
         },
         
         // Остановка текущего звука
         stopCurrentSound() {
             if (this.currentlyPlaying) {
-                console.log('Останавливаю текущий звук');
                 this.currentlyPlaying.pause();
                 this.currentlyPlaying.currentTime = 0;
                 this.currentlyPlaying = null;
                 
                 // Сбрасываем все панели
-                document.querySelectorAll('.sound-panel').forEach(panel => {
+                document.querySelectorAll('.sound-panel.playing').forEach(panel => {
                     this.setPlayingState(panel, false);
                 });
             }
@@ -204,11 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Установка состояния воспроизведения
         setPlayingState(panel, isPlaying) {
-            if (isPlaying) {
-                panel.classList.add('playing');
-            } else {
-                panel.classList.remove('playing');
-            }
+            panel.classList.toggle('playing', isPlaying);
         },
         
         // Обновление статуса
@@ -225,13 +237,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const volumeValue = document.getElementById('volume-value');
             
             if (volumeSlider && volumeValue) {
+                // Используем requestAnimationFrame для плавности
+                let rafId;
                 volumeSlider.addEventListener('input', (e) => {
-                    const value = Math.round(e.target.value * 100);
-                    volumeValue.textContent = `${value}%`;
+                    if (rafId) cancelAnimationFrame(rafId);
                     
-                    if (this.currentlyPlaying) {
-                        this.currentlyPlaying.volume = e.target.value;
-                    }
+                    rafId = requestAnimationFrame(() => {
+                        const value = Math.round(e.target.value * 100);
+                        volumeValue.textContent = `${value}%`;
+                        
+                        if (this.currentlyPlaying) {
+                            this.currentlyPlaying.volume = e.target.value;
+                        }
+                    });
                 });
             }
             
@@ -242,6 +260,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.stopCurrentSound();
                 });
             }
+            
+            // Оптимизация скролла
+            this.setupSmoothScrolling();
+        },
+        
+        // Плавный скролл
+        setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
         }
     };
     
@@ -256,4 +290,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (stopBtn) stopBtn.click();
         }
     });
+    
+    // Оптимизация для мобильных
+    if ('ontouchstart' in window) {
+        document.documentElement.style.touchAction = 'manipulation';
+    }
 });
