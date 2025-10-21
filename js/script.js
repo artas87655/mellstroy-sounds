@@ -1,4 +1,4 @@
-// Звуковая панель Mellstroy - БЕЗ АДМИН-ПАНЕЛИ
+// Звуковая панель Mellstroy - С КНОПКОЙ СКАЧИВАНИЯ
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Скрипт запущен!');
     
@@ -8,12 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // МАССИВ С НАЗВАНИЯМИ МЕМОВ - РЕДАКТИРУЙТЕ ЗДЕСЬ!
         memeNames: [
-            "АМ АМ АМ",
-            "сливыы", 
+            "Легендарная фраза 1",
+            "Смех до слёз", 
             "Реакция на донат",
-            "радуется",
+            "Эпичный крик",
             "Шутка в чате",
-            "что за бизнэс remix",
+            "Удивление",
             "Боевой клич",
             "Приветствие",
             "Прощание", 
@@ -72,14 +72,31 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="sound-filename">${filename}</div>
                         <div class="sound-status" id="status-${soundId}">⚫ Ожидание...</div>
                     </div>
-                    <div class="play-icon">▶</div>
+                    <div class="panel-buttons">
+                        <button class="play-btn" data-sound="${soundId}">
+                            <div class="play-icon">▶</div>
+                            Воспроизвести
+                        </button>
+                        <button class="download-btn" data-filename="${filename}">
+                            ⬇️ Скачать
+                        </button>
+                    </div>
                 </div>
             `;
             
-            // Обработчик клика
-            panel.addEventListener('click', () => {
+            // Обработчик клика на кнопку воспроизведения
+            const playBtn = panel.querySelector('.play-btn');
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 console.log(`Клик по панели: ${soundId}`);
                 this.playSound(soundId, panel, filename);
+            });
+            
+            // Обработчик клика на кнопку скачивания
+            const downloadBtn = panel.querySelector('.download-btn');
+            downloadBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.downloadSound(filename, title);
             });
             
             return panel;
@@ -153,6 +170,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         
+        // Скачивание звука
+        downloadSound(filename, title) {
+            const soundUrl = `./sounds/${filename}`;
+            
+            // Создаем временную ссылку для скачивания
+            const link = document.createElement('a');
+            link.href = soundUrl;
+            link.download = `${title}.mp3`;
+            
+            // Эмулируем клик для скачивания
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log(`⬇️ Скачивание: ${filename}`);
+        },
+        
         // Остановка текущего звука
         stopCurrentSound() {
             if (this.currentlyPlaying) {
@@ -223,5 +257,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-
